@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 from textwrap import dedent
+import time
 from urllib.error import URLError
 from urllib.request import urlopen
 import re
@@ -23,6 +25,7 @@ ASSETS = {
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 FETCH_TIMEOUT_SECONDS = 30
+FETCH_RETRY_DELAYS_SECONDS = (1, 2, 4)
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,11 +50,21 @@ def load_manifest(version: str, manifest_file: Path | None) -> str:
         return manifest_file.read_text(encoding="utf-8")
 
     url = f"{RELEASE_URL_TEMPLATE.format(version=version)}/cld-gateway-package_SHA256SUMS"
-    try:
-        with urlopen(url, timeout=FETCH_TIMEOUT_SECONDS) as response:
-            return response.read().decode("utf-8")
-    except (TimeoutError, URLError, OSError) as exc:
-        raise SystemExit(f"Failed to fetch checksum manifest from {url}: {exc}") from exc
+    errors: list[str] = []
+    for attempt, delay in enumerate((*FETCH_RETRY_DELAYS_SECONDS, None), start=1):
+        try:
+            with urlopen(url, timeout=FETCH_TIMEOUT_SECONDS) as response:
+                return response.read().decode("utf-8")
+        except (TimeoutError, URLError, OSError) as exc:
+            errors.append(f"attempt {attempt}: {exc}")
+            if delay is None:
+                joined_errors = "; ".join(errors)
+                raise SystemExit(
+                    f"Failed to fetch checksum manifest from {url}: {joined_errors}"
+                ) from exc
+            time.sleep(delay)
+
+    raise SystemExit(f"Failed to fetch checksum manifest from {url}")
 
 
 def parse_manifest(manifest: str) -> dict[str, str]:

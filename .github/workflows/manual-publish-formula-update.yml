@@ -64,7 +64,7 @@ jobs:
 
       - name: Install Homebrew
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Run Homebrew style check
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
@@ -75,8 +75,10 @@ jobs:
       - name: Run Homebrew audit
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
+        env:
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
         run: |
-          brew audit --strict --online cld-gateway
+          brew audit --strict --online Formula/cld-gateway.rb
 
       - name: Commit formula update
         if: ${{ steps.version_check.outputs.should_update == 'true' }}

@@ -61,13 +61,18 @@ if [[ -f "$formula_path" ]]; then
   ' "$formula_path")"
 
   if [[ -z "$current_version" ]]; then
-    # Bootstrap placeholder formula before the first real release: no version yet,
-    # but the incoming release should populate the formula.
-    printf 'should_update=%s\ncurrent_version=%s\nincoming_version=%s\n' \
-      "true" \
-      "" \
-      "$incoming_version"
-    exit 0
+    if grep -q "This formula is populated by the bytonomics/homebrew-tap release workflows" "$formula_path"; then
+      # Bootstrap placeholder formula before the first real release: no version yet,
+      # but the incoming release should populate the formula.
+      printf 'should_update=%s\ncurrent_version=%s\nincoming_version=%s\n' \
+        "true" \
+        "" \
+        "$incoming_version"
+      exit 0
+    fi
+
+    echo "Could not extract version from $formula_path" >&2
+    exit 1
   fi
 
   comparison="$(compare_versions "$current_version" "$incoming_version")"
