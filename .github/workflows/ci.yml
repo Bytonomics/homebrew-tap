@@ -39,6 +39,11 @@ jobs:
         run: |
           brew style Formula/cld-gateway.rb
 
+      - name: Print rendered formula
+        shell: bash
+        run: |
+          cat Formula/cld-gateway.rb
+
       - name: Run Homebrew audit
         shell: bash
         env:

@@ -72,6 +72,12 @@ jobs:
         run: |
           brew style Formula/cld-gateway.rb
 
+      - name: Print rendered formula
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          cat Formula/cld-gateway.rb
+
       - name: Run Homebrew audit
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
