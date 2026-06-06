@@ -31,7 +31,8 @@ jobs:
         run: |
           python3 .github/scripts/render-formula.py \
             --version 0.1.0 \
-            --manifest-file .github/scripts/tests/data/cld-gateway-package_SHA256SUMS
+            --manifest-file .github/scripts/tests/data/cld-gateway-package_SHA256SUMS \
+            --output Formula/cld-gateway.rb
           ruby -c Formula/cld-gateway.rb
 
       - name: Run Homebrew style check

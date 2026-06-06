@@ -51,7 +51,9 @@ jobs:
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
         run: |
-          python3 .github/scripts/render-formula.py --version "${{ steps.payload.outputs.value }}"
+          python3 .github/scripts/render-formula.py \
+            --version "${{ steps.payload.outputs.value }}" \
+            --output Formula/cld-gateway.rb
 
       - name: Validate formula syntax
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
