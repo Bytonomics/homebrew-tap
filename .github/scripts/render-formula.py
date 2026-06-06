@@ -89,7 +89,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
           desc "Anthropic-compatible HTTP proxy that routes requests through the ChatGPT/Codex backend"
           homepage "https://github.com/Bytonomics/cld-gateway"
           version "{version}"
-          license "Apache-2.0"
+          license "Elastic License 2.0"
 
           on_macos do
             if Hardware::CPU.intel?

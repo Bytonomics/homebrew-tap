@@ -8,7 +8,7 @@
 class CldGateway < Formula
   desc "Anthropic-compatible HTTP proxy that routes requests through the ChatGPT/Codex backend"
   homepage "https://github.com/Bytonomics/cld-gateway"
-  license "Apache-2.0"
+  license "Elastic License 2.0"
 
   def install
     odie <<~ERROR
