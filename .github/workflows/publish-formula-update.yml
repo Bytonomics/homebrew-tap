@@ -47,6 +47,10 @@ jobs:
         run: |
           echo "Formula already at ${{ steps.version_check.outputs.current_version }} or newer; skipping update."
 
+      - name: Install Homebrew
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        uses: Homebrew/actions/setup-homebrew@main
+
       - name: Render formula
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
@@ -60,10 +64,6 @@ jobs:
         shell: bash
         run: |
           ruby -c Formula/cld-gateway.rb
-
-      - name: Install Homebrew
-        if: ${{ steps.version_check.outputs.should_update == 'true' }}
-        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Run Homebrew style check
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
