@@ -44,4 +44,4 @@ jobs:
         env:
           HOMEBREW_NO_INSTALL_FROM_API: "1"
         run: |
-          brew audit --strict --online Formula/cld-gateway.rb
+          brew audit --strict --online bytonomics/tap/cld-gateway

@@ -5,7 +5,7 @@ Homebrew tap for installing `cld-gateway` from Bytonomics.
 ## Install
 
 ```sh
-brew tap bytonomics/homebrew-tap
+brew tap bytonomics/tap
 brew install cld-gateway
 ```
 
@@ -19,6 +19,6 @@ At a high level:
 
 - A new `cld-gateway` release is published from `Bytonomics/cld-gateway`.
 - That release includes the packaged archive(s) and checksum(s).
-- The gateway release workflow must dispatch a `version-updated` event to `bytonomics/homebrew-tap`.
+- The gateway release workflow must dispatch a `version-updated` event to `Bytonomics/homebrew-tap`.
 - The tap workflow renders `Formula/cld-gateway.rb` from the published checksum manifest, validates it with Homebrew, and commits the update.
 - If that automatic dispatch fails, trigger `manual-publish-formula-update.yml` in the tap repo and provide the release version.
