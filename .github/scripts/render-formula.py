@@ -13,7 +13,7 @@ import re
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT = REPO_ROOT / "Formula" / "cld-gateway.rb"
 RELEASE_URL_TEMPLATE = (
-    "https://github.com/bytonomics/gateway/releases/download/cld-gateway-v{version}"
+    "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v{version}"
 )
 ASSETS = {
     "aarch64-apple-darwin": "cld-gateway-package-aarch64-apple-darwin.tar.gz",
@@ -87,7 +87,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
 
         class CldGateway < Formula
           desc "Anthropic-compatible HTTP proxy that routes requests through the ChatGPT/Codex backend"
-          homepage "https://github.com/bytonomics/gateway"
+          homepage "https://github.com/Bytonomics/cld-gateway"
           version "{version}"
           license "Apache-2.0"
 
