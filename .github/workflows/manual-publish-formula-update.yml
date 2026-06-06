@@ -1,0 +1,97 @@
+name: manual-publish-formula-update
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: cld-gateway release version
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Validate input version
+        id: input_version
+        shell: bash
+        env:
+          RAW_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          version="${RAW_VERSION}"
+          [[ -n "${version}" ]] || { echo "Missing version input"; exit 1; }
+          [[ "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(alpha|beta)(\.[0-9]+)?)?$ ]] \
+            || { echo "Unsupported version format: ${version}"; exit 1; }
+          printf 'value=%s\n' "${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Check if formula update is needed
+        id: version_check
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(bash .github/scripts/check-version.sh "${{ steps.input_version.outputs.value }}")"
+          printf '%s\n' "$output"
+          should_update="$(printf '%s\n' "$output" | awk -F= '/^should_update=/{print $2}')"
+          current_version="$(printf '%s\n' "$output" | awk -F= '/^current_version=/{print $2}')"
+          printf 'should_update=%s\n' "$should_update" >> "$GITHUB_OUTPUT"
+          printf 'current_version=%s\n' "$current_version" >> "$GITHUB_OUTPUT"
+
+      - name: Stop when formula is already current
+        if: ${{ steps.version_check.outputs.should_update != 'true' }}
+        shell: bash
+        run: |
+          echo "Formula already at ${{ steps.version_check.outputs.current_version }} or newer; skipping update."
+
+      - name: Render formula
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          python3 .github/scripts/render-formula.py --version "${{ steps.input_version.outputs.value }}"
+
+      - name: Validate formula syntax
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          ruby -c Formula/cld-gateway.rb
+
+      - name: Install Homebrew
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Run Homebrew style check
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          brew style Formula/cld-gateway.rb
+
+      - name: Run Homebrew audit
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          brew audit --strict --online cld-gateway
+
+      - name: Commit formula update
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/cld-gateway.rb
+          git commit -m "Update cld-gateway formula to v${{ steps.input_version.outputs.value }}"
+
+      - name: Rebase and push
+        if: ${{ steps.version_check.outputs.should_update == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin main
+          git push origin HEAD:main

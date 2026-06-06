@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    paths:
+      - '.github/scripts/**'
+      - '.github/workflows/**'
+      - 'Formula/**'
+      - 'README.md'
+      - 'LICENSE'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Run version gate tests
+        shell: bash
+        run: |
+          bash .github/scripts/tests/check-version.sh
+
+      - name: Render formula from fixture manifest
+        shell: bash
+        run: |
+          tmp_formula="$(mktemp)"
+          python3 .github/scripts/render-formula.py \
+            --version 0.1.0 \
+            --manifest-file .github/scripts/tests/data/cld-gateway-package_SHA256SUMS \
+            --output "$tmp_formula"
+          ruby -c "$tmp_formula"
+
+      - name: Run Homebrew style check
+        shell: bash
+        run: |
+          brew style Formula/cld-gateway.rb
+
+      - name: Run Homebrew audit
+        shell: bash
+        run: |
+          brew audit --strict --online cld-gateway
