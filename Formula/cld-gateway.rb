@@ -8,7 +8,7 @@
 class CldGateway < Formula
   desc "Anthropic-compatible HTTP proxy that routes to OpenAI"
   homepage "https://github.com/Bytonomics/cld-gateway"
-  license "Elastic License 2.0"
+  license "Elastic-2.0"
 
   def install
     odie <<~ERROR
