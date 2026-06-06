@@ -6,7 +6,7 @@
 # The tap workflows rewrite this file from render-formula.py once that manifest
 # exists.
 class CldGateway < Formula
-  desc "Anthropic-compatible HTTP proxy that routes requests through the ChatGPT/Codex backend"
+  desc "Anthropic-compatible HTTP proxy that routes to OpenAI"
   homepage "https://github.com/Bytonomics/cld-gateway"
   license "Elastic License 2.0"
 

@@ -86,7 +86,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
         # frozen_string_literal: true
 
         class CldGateway < Formula
-          desc "Anthropic-compatible HTTP proxy that routes requests through the ChatGPT/Codex backend"
+          desc "Anthropic-compatible HTTP proxy that routes to OpenAI"
           homepage "https://github.com/Bytonomics/cld-gateway"
           version "{version}"
           license "Elastic License 2.0"
