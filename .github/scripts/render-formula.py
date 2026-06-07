@@ -26,6 +26,31 @@ ASSETS = {
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 FETCH_TIMEOUT_SECONDS = 30
 FETCH_RETRY_DELAYS_SECONDS = (1, 2, 4)
+CLAUDE_CODEX_SHARED_ENTRIES = (
+    ".claude.json",
+    "CLAUDE.md",
+    "agents",
+    "commands",
+    "debug",
+    "docs",
+    "downloads",
+    "history.jsonl",
+    "hookify.block-direct-go-commands.local.md",
+    "hookify.block-git-add-all.local.md",
+    "hookify.block-no-verify-commit.local.md",
+    "hooks",
+    "ide",
+    "output-styles",
+    "plans",
+    "plugins",
+    "projects",
+    "session-env",
+    "shell-snapshots",
+    "skills",
+    "statusline-command.sh",
+    "todos",
+    "universal_instructions.md",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -93,6 +118,9 @@ def require_digest(digests: dict[str, str], asset: str) -> str:
 
 def render_formula(version: str, digests: dict[str, str]) -> str:
     base_url = RELEASE_URL_TEMPLATE.format(version=version)
+    shared_entries = "\n".join(
+        f"              {entry_name}" for entry_name in CLAUDE_CODEX_SHARED_ENTRIES
+    )
     return dedent(
         f'''\
         # typed: false
@@ -130,25 +158,39 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
 
           def install
             gateway_home = Pathname(Dir.home)/".gateway"
+            claude_home = Pathname(Dir.home)/".claude"
             claude_codex_home = Pathname(Dir.home)/".claude_codex"
-            gateway_config = gateway_home/"config.json"
+            gateway_config = gateway_home/"config.yaml"
             claude_settings = claude_codex_home/"settings.json"
+            shared_claude_entries = %w[
+{shared_entries}
+            ]
 
             bin.install "bin/cld-gateway"
 
             gateway_home.mkpath
             claude_codex_home.mkpath
-            gateway_config.write((buildpath/"config.json").read)
+            gateway_config.write((buildpath/"config.yaml").read)
             claude_settings.write((buildpath/"settings.json").read)
+            if claude_home.directory?
+              shared_claude_entries.each do |entry_name|
+                source = claude_home/entry_name
+                target = claude_codex_home/entry_name
+                next unless source.exist? || source.symlink?
+                next if target.exist? || target.symlink?
+
+                File.symlink(source.to_s, target.to_s)
+              end
+            end
 
             (bin/"cldg").write <<~SH
               #!/bin/sh
-              exec claude --settings "#{claude_settings}" "$@"
+              exec claude --settings "#{{claude_settings}}" "$@"
             SH
 
             (bin/"clddg").write <<~SH
               #!/bin/sh
-              exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
+              exec "#{{opt_bin}}/cldg" --dangerously-skip-permissions "$@"
             SH
 
             chmod 0555, bin/"cldg", bin/"clddg"
@@ -156,16 +198,18 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
 
           service do
             run [opt_bin/"cld-gateway", "serve"]
-            environment_variables GATEWAY_CONFIG_PATH: "#{Pathname(Dir.home)/".gateway/config.json"}"
+            environment_variables GATEWAY_CONFIG_PATH: "#{{Pathname(Dir.home)/".gateway/config.yaml"}}"
           end
 
           def caveats
             <<~EOS
               Runtime config was installed to:
-                #{Pathname(Dir.home)/".gateway/config.json"}
+                #{{Pathname(Dir.home)/".gateway/config.yaml"}}
 
               Claude settings for the wrapper were installed to:
-                #{Pathname(Dir.home)/".claude_codex/settings.json"}
+                #{{Pathname(Dir.home)/".claude_codex/settings.json"}}
+
+              Existing shared Claude Code entries from ~/.claude are symlinked into ~/.claude_codex when missing.
 
               The cldg and clddg wrappers shell out to `claude`.
               Make sure the `claude` executable is already available on your PATH.
@@ -173,7 +217,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
           end
 
           test do
-            output = shell_output("#{bin}/cld-gateway invalid-command 2>&1", 1)
+            output = shell_output("#{{bin}}/cld-gateway invalid-command 2>&1", 1)
             assert_match "unknown command", output
           end
         end

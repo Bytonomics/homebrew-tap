@@ -23,8 +23,9 @@ This tap installs the packaged `cld-gateway` release published from [`Bytonomics
 Each packaged release includes, and the formula installs:
 
 - the `cld-gateway` binary
-- packaged `config.json` and `settings.json`
+- packaged `config.yaml` and `settings.json`
 - wrapper commands `cldg` and `clddg`
+- symlinks from `~/.claude_codex` to existing shared Claude Code entries under `~/.claude`
 
 ## Wrapper command prerequisite
 
