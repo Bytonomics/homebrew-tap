@@ -160,7 +160,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
             gateway_home = Pathname(Dir.home)/".gateway"
             claude_home = Pathname(Dir.home)/".claude"
             claude_codex_home = Pathname(Dir.home)/".claude_codex"
-            gateway_config = gateway_home/"config.yaml"
+            gateway_config = gateway_home/"config.yml"
             claude_settings = claude_codex_home/"settings.json"
             shared_claude_entries = %w[
 {shared_entries}
@@ -170,7 +170,7 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
 
             gateway_home.mkpath
             claude_codex_home.mkpath
-            gateway_config.write((buildpath/"config.yaml").read)
+            gateway_config.write((buildpath/"config.yml").read)
             claude_settings.write((buildpath/"settings.json").read)
             if claude_home.directory?
               shared_claude_entries.each do |entry_name|
@@ -198,13 +198,13 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
 
           service do
             run [opt_bin/"cld-gateway", "serve"]
-            environment_variables GATEWAY_CONFIG_PATH: "#{{Pathname(Dir.home)/".gateway/config.yaml"}}"
+            environment_variables GATEWAY_CONFIG_PATH: "#{{Pathname(Dir.home)/".gateway/config.yml"}}"
           end
 
           def caveats
             <<~EOS
               Runtime config was installed to:
-                #{{Pathname(Dir.home)/".gateway/config.yaml"}}
+                #{{Pathname(Dir.home)/".gateway/config.yml"}}
 
               Claude settings for the wrapper were installed to:
                 #{{Pathname(Dir.home)/".claude_codex/settings.json"}}

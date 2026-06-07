@@ -1,42 +1,27 @@
 # Bytonomics Homebrew Tap
 
-Homebrew tap for installing `cld-gateway` from Bytonomics.
+Homebrew tap for installing Bytonomics packages.
 
-## Install
+## Install from the tap
 
 ```sh
 brew tap bytonomics/tap
-brew install cld-gateway
+brew install <formula>
 ```
 
-The formula also supports running `cld-gateway` with Homebrew Services:
+## Available packages
 
-```sh
-brew services start cld-gateway
-brew services stop cld-gateway
-```
+### cld-gateway
 
-## What this tap installs
+Anthropic-compatible HTTP proxy and local daemon that routes requests through the ChatGPT/Codex backend.
 
-This tap installs the packaged `cld-gateway` release published from [`Bytonomics/cld-gateway`](https://github.com/Bytonomics/cld-gateway). The formula points at the release archive and checksum for a specific version.
+Supports `brew services` for daemon management.
 
-Each packaged release includes, and the formula installs:
+See the main project README for installation outcomes, wrapper commands, config locations, and usage details:
+- https://github.com/Bytonomics/cld-gateway
 
-- the `cld-gateway` binary
-- packaged `config.yaml` and `settings.json`
-- wrapper commands `cldg` and `clddg`
-- symlinks from `~/.claude_codex` to existing shared Claude Code entries under `~/.claude`
+## Repo and updates
 
-## Wrapper command prerequisite
+Formulae in this tap are maintained from package release automation.
 
-This tap does not install the Claude CLI itself. For `cldg` and `clddg` to work, `claude` must already be installed separately and available on your `PATH`.
-
-## Update flow
-
-At a high level:
-
-- A new `cld-gateway` release is published from `Bytonomics/cld-gateway`.
-- That release includes the packaged archive(s) and checksum(s).
-- The gateway release workflow must dispatch a `version-updated` event to `Bytonomics/homebrew-tap`.
-- The tap workflow renders `Formula/cld-gateway.rb` from the published checksum manifest, validates it with Homebrew, and commits the update.
-- If that automatic dispatch fails, trigger `manual-publish-formula-update.yml` in the tap repo and provide the release version.
+If an automated formula update fails, maintainers can use the tap repo's manual publish workflow.
