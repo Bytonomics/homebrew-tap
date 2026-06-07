@@ -129,7 +129,47 @@ def render_formula(version: str, digests: dict[str, str]) -> str:
           end
 
           def install
+            gateway_home = Pathname(Dir.home)/".gateway"
+            claude_codex_home = Pathname(Dir.home)/".claude_codex"
+            gateway_config = gateway_home/"config.json"
+            claude_settings = claude_codex_home/"settings.json"
+
             bin.install "bin/cld-gateway"
+
+            gateway_home.mkpath
+            claude_codex_home.mkpath
+            gateway_config.write((buildpath/"config.json").read)
+            claude_settings.write((buildpath/"settings.json").read)
+
+            (bin/"cldg").write <<~SH
+              #!/bin/sh
+              exec claude --settings "#{claude_settings}" "$@"
+            SH
+
+            (bin/"clddg").write <<~SH
+              #!/bin/sh
+              exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
+            SH
+
+            chmod 0555, bin/"cldg", bin/"clddg"
+          end
+
+          service do
+            run [opt_bin/"cld-gateway", "serve"]
+            environment_variables GATEWAY_CONFIG_PATH: "#{Pathname(Dir.home)/".gateway/config.json"}"
+          end
+
+          def caveats
+            <<~EOS
+              Runtime config was installed to:
+                #{Pathname(Dir.home)/".gateway/config.json"}
+
+              Claude settings for the wrapper were installed to:
+                #{Pathname(Dir.home)/".claude_codex/settings.json"}
+
+              The cldg and clddg wrappers shell out to `claude`.
+              Make sure the `claude` executable is already available on your PATH.
+            EOS
           end
 
           test do

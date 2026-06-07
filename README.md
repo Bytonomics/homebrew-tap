@@ -9,9 +9,26 @@ brew tap bytonomics/tap
 brew install cld-gateway
 ```
 
+The formula also supports running `cld-gateway` with Homebrew Services:
+
+```sh
+brew services start cld-gateway
+brew services stop cld-gateway
+```
+
 ## What this tap installs
 
 This tap installs the packaged `cld-gateway` release published from [`Bytonomics/cld-gateway`](https://github.com/Bytonomics/cld-gateway). The formula points at the release archive and checksum for a specific version.
+
+Each packaged release includes, and the formula installs:
+
+- the `cld-gateway` binary
+- packaged `config.json` and `settings.json`
+- wrapper commands `cldg` and `clddg`
+
+## Wrapper command prerequisite
+
+This tap does not install the Claude CLI itself. For `cldg` and `clddg` to work, `claude` must already be installed separately and available on your `PATH`.
 
 ## Update flow
 
