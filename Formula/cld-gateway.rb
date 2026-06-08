@@ -11,24 +11,24 @@ class CldGateway < Formula
   on_macos do
     if Hardware::CPU.intel?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.2/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "2ce0b0fcb603b31a6126a2bffec0855b5d5d1d20850aa723a1976935d71513ba"
+      sha256 "9dd58767d5f787425bc6f439c4ab3b2def7b8e45691ffe7d33f7465bd1847821"
     end
 
     if Hardware::CPU.arm?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.2/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "a2f99aee763d43a9486417de66d7cbb35ca48e587a1bc4e7c63fb0c6d694aa76"
+      sha256 "760f04bd10e82064c6f0121a73e57370066b85ab4644ee186de028d4a668ec31"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.2/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "3008d32532c8e65f5307ba7bb0cff3a82a0c6b298b89d77001ff0cf2992809c2"
+      sha256 "394f9df75c6ea74f05bea8b81b529a7918b23933ae882d378a53bce2359b3809"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.2/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "e3a1838913c57df4fbd927d6016cd5435c7e485672feabc8b5daa5d9c72b9330"
+      sha256 "1a7f945cb165944f6ecfb8534e15055806ea3cdc3f13e53488e5d8aa1b45eb24"
     end
   end
 
