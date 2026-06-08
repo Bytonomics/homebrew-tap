@@ -57,36 +57,18 @@ jobs:
       - name: Render formula
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
+        env:
+          FORMULA_VERSION: ${{ steps.input_version.outputs.value }}
         run: |
           python3 .github/scripts/render-formula.py \
-            --version "${{ steps.input_version.outputs.value }}" \
+            --version "$FORMULA_VERSION" \
             --output Formula/cld-gateway.rb
 
-      - name: Validate formula syntax
+      - name: Run local-style formula validation
         if: ${{ steps.version_check.outputs.should_update == 'true' }}
         shell: bash
         run: |
-          ruby -c Formula/cld-gateway.rb
-
-      - name: Run Homebrew style check
-        if: ${{ steps.version_check.outputs.should_update == 'true' }}
-        shell: bash
-        run: |
-          brew style Formula/cld-gateway.rb
-
-      - name: Print rendered formula
-        if: ${{ steps.version_check.outputs.should_update == 'true' }}
-        shell: bash
-        run: |
-          cat Formula/cld-gateway.rb
-
-      - name: Run Homebrew audit
-        if: ${{ steps.version_check.outputs.should_update == 'true' }}
-        shell: bash
-        env:
-          HOMEBREW_NO_INSTALL_FROM_API: "1"
-        run: |
-          brew audit --strict --online bytonomics/tap/cld-gateway
+          bash .github/scripts/validate-formula.sh current
 
       - name: Commit formula update
         if: ${{ steps.version_check.outputs.should_update == 'true' }}

@@ -7,6 +7,7 @@ on:
       - '.github/scripts/**'
       - '.github/workflows/**'
       - 'Formula/**'
+      - 'Makefile'
       - 'README.md'
       - 'LICENSE'
 
@@ -21,33 +22,7 @@ jobs:
       - name: Install Homebrew
         uses: Homebrew/actions/setup-homebrew@main
 
-      - name: Run version gate tests
+      - name: Run local-style formula validation
         shell: bash
         run: |
-          bash .github/scripts/tests/check-version.sh
-
-      - name: Render formula in place from fixture manifest
-        shell: bash
-        run: |
-          python3 .github/scripts/render-formula.py \
-            --version 0.1.0 \
-            --manifest-file .github/scripts/tests/data/cld-gateway-package_SHA256SUMS \
-            --output Formula/cld-gateway.rb
-          ruby -c Formula/cld-gateway.rb
-
-      - name: Run Homebrew style check
-        shell: bash
-        run: |
-          brew style Formula/cld-gateway.rb
-
-      - name: Print rendered formula
-        shell: bash
-        run: |
-          cat Formula/cld-gateway.rb
-
-      - name: Run Homebrew audit
-        shell: bash
-        env:
-          HOMEBREW_NO_INSTALL_FROM_API: "1"
-        run: |
-          brew audit --strict --online bytonomics/tap/cld-gateway
+          bash .github/scripts/validate-formula.sh fixture

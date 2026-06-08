@@ -10,6 +10,7 @@ incoming_version="$1"
 formula_path="./Formula/cld-gateway.rb"
 current_version=""
 should_update="true"
+release_tag_prefix="cld-gateway-v"
 
 compare_versions() {
   python3 - "$1" "$2" <<'PY'
@@ -53,10 +54,23 @@ PY
 }
 
 if [[ -f "$formula_path" ]]; then
-  current_version="$(awk -F '"' '
+  current_version="$(awk -v tag_prefix="$release_tag_prefix" -F '"' '
     /^[[:space:]]*version "/ {
       print $2
       exit
+    }
+    /^[[:space:]]*url "/ {
+      url = $2
+      marker = "/releases/download/" tag_prefix
+      marker_pos = index(url, marker)
+      if (marker_pos > 0) {
+        remainder = substr(url, marker_pos + length(marker))
+        slash_pos = index(remainder, "/")
+        if (slash_pos > 1) {
+          print substr(remainder, 1, slash_pos - 1)
+          exit
+        }
+      }
     }
   ' "$formula_path")"
 

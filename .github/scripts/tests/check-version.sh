@@ -66,7 +66,7 @@ setup_malformed_formula() {
 
 setup_bootstrap_formula() {
   local tmpdir="$1"
-  cp "$fixture_dir/formula-no-version.rb" "$tmpdir/Formula/cld-gateway.rb"
+  cp "$fixture_dir/formula-bootstrap-placeholder.rb" "$tmpdir/Formula/cld-gateway.rb"
 }
 
 main() {
