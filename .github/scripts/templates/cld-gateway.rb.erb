@@ -70,7 +70,8 @@ class CldGateway < Formula
       exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
     SH
 
-    chmod 0555, bin/"cldg", bin/"clddg"
+    chmod 0555, bin/"cldg"
+    chmod 0555, bin/"clddg"
   end
 
   service do
