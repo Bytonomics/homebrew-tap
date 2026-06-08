@@ -82,7 +82,7 @@ class CldGateway < Formula
 
     (bin/"cldg").write <<~SH
       #!/bin/sh
-      exec claude --settings "#{claude_settings}" "$@"
+      exec claude --settings "$HOME/.claude_codex/settings.json" "$@"
     SH
 
     (bin/"clddg").write <<~SH
