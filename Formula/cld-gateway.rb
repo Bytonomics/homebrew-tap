@@ -31,6 +31,24 @@ class CldGateway < Formula
   end
 
   def install
+    bin.install "bin/cld-gateway"
+    pkgshare.install "config.yml", "settings.json"
+
+    (bin/"cldg").write <<~SH
+      #!/bin/sh
+      exec claude --settings "$HOME/.claude_codex/settings.json" "$@"
+    SH
+
+    (bin/"clddg").write <<~SH
+      #!/bin/sh
+      exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
+    SH
+
+    chmod 0555, bin/"cldg"
+    chmod 0555, bin/"clddg"
+  end
+
+  def post_install
     gateway_home = Pathname(Dir.home)/".gateway"
     claude_home = Pathname(Dir.home)/".claude"
     claude_codex_home = Pathname(Dir.home)/".claude_codex"
@@ -62,12 +80,10 @@ class CldGateway < Formula
       universal_instructions.md
     ]
 
-    bin.install "bin/cld-gateway"
-
     gateway_home.mkpath
     claude_codex_home.mkpath
-    gateway_config.write((buildpath/"config.yml").read)
-    claude_settings.write((buildpath/"settings.json").read)
+    gateway_config.write((pkgshare/"config.yml").read)
+    claude_settings.write((pkgshare/"settings.json").read)
     if claude_home.directory?
       shared_claude_entries.each do |entry_name|
         source = claude_home/entry_name
@@ -79,19 +95,6 @@ class CldGateway < Formula
         File.symlink(source.to_s, target.to_s)
       end
     end
-
-    (bin/"cldg").write <<~SH
-      #!/bin/sh
-      exec claude --settings "$HOME/.claude_codex/settings.json" "$@"
-    SH
-
-    (bin/"clddg").write <<~SH
-      #!/bin/sh
-      exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
-    SH
-
-    chmod 0555, bin/"cldg"
-    chmod 0555, bin/"clddg"
   end
 
   service do

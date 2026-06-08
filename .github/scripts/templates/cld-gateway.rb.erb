@@ -31,34 +31,8 @@ class CldGateway < Formula
   end
 
   def install
-    gateway_home = Pathname(Dir.home)/".gateway"
-    claude_home = Pathname(Dir.home)/".claude"
-    claude_codex_home = Pathname(Dir.home)/".claude_codex"
-    gateway_config = gateway_home/"config.yml"
-    claude_settings = claude_codex_home/"settings.json"
-    shared_claude_entries = %w[
-<% shared_claude_entries.each do |entry_name| -%>
-      <%= entry_name %>
-<% end -%>
-    ]
-
     bin.install "bin/cld-gateway"
-
-    gateway_home.mkpath
-    claude_codex_home.mkpath
-    gateway_config.write((buildpath/"config.yml").read)
-    claude_settings.write((buildpath/"settings.json").read)
-    if claude_home.directory?
-      shared_claude_entries.each do |entry_name|
-        source = claude_home/entry_name
-        target = claude_codex_home/entry_name
-        source_present = source.exist? || source.symlink?
-        next unless source_present
-        next if target.exist? || target.symlink?
-
-        File.symlink(source.to_s, target.to_s)
-      end
-    end
+    pkgshare.install "config.yml", "settings.json"
 
     (bin/"cldg").write <<~SH
       #!/bin/sh
@@ -72,6 +46,35 @@ class CldGateway < Formula
 
     chmod 0555, bin/"cldg"
     chmod 0555, bin/"clddg"
+  end
+
+  def post_install
+    gateway_home = Pathname(Dir.home)/".gateway"
+    claude_home = Pathname(Dir.home)/".claude"
+    claude_codex_home = Pathname(Dir.home)/".claude_codex"
+    gateway_config = gateway_home/"config.yml"
+    claude_settings = claude_codex_home/"settings.json"
+    shared_claude_entries = %w[
+<% shared_claude_entries.each do |entry_name| -%>
+      <%= entry_name %>
+<% end -%>
+    ]
+
+    gateway_home.mkpath
+    claude_codex_home.mkpath
+    gateway_config.write((pkgshare/"config.yml").read)
+    claude_settings.write((pkgshare/"settings.json").read)
+    if claude_home.directory?
+      shared_claude_entries.each do |entry_name|
+        source = claude_home/entry_name
+        target = claude_codex_home/entry_name
+        source_present = source.exist? || source.symlink?
+        next unless source_present
+        next if target.exist? || target.symlink?
+
+        File.symlink(source.to_s, target.to_s)
+      end
+    end
   end
 
   service do
