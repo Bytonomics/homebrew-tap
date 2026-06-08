@@ -54,9 +54,8 @@ class CldGateway < Formula
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     gateway_home = user_home/".gateway"
     claude_home = user_home/".claude"
-    claude_codex_home = user_home/".claude_codex"
+    claude_codex_path = user_home/".claude_codex"
     gateway_config = gateway_home/"config.yml"
-    claude_settings = claude_codex_home/"settings.json"
     shared_claude_entries = %w[
 <% shared_claude_entries.each do |entry_name| -%>
       <%= entry_name %>
@@ -64,19 +63,26 @@ class CldGateway < Formula
     ]
 
     gateway_home.mkpath
-    claude_codex_home.mkpath
-    gateway_config.write((pkgshare/"config.yml").read)
-    claude_settings.write((pkgshare/"settings.json").read)
-    if claude_home.directory?
-      shared_claude_entries.each do |entry_name|
-        source = claude_home/entry_name
-        target = claude_codex_home/entry_name
-        source_present = source.exist? || source.symlink?
-        next unless source_present
-        next if target.exist? || target.symlink?
-
-        File.symlink(source.to_s, target.to_s)
+    if claude_codex_path.exist?
+      if !claude_codex_path.directory? && !claude_codex_path.symlink?
+        odie "Expected ~/.claude_codex to be a directory or symlink"
       end
+    else
+      claude_codex_path.mkpath
+    end
+
+    gateway_config.write((pkgshare/"config.yml").read)
+    (claude_codex_path/"settings.json").write((pkgshare/"settings.json").read)
+    odie "Expected ~/.claude to exist as a directory" unless claude_home.directory?
+
+    shared_claude_entries.each do |entry_name|
+      source = claude_home/entry_name
+      target = claude_codex_path/entry_name
+      source_present = source.exist? || source.symlink?
+      next unless source_present
+      next if target.exist? || target.symlink?
+
+      File.symlink(source.to_s, target.to_s)
     end
   end
 
