@@ -85,7 +85,7 @@ class CldGateway < Formula
     gateway_home.mkpath
     if claude_codex_path.symlink?
       claude_codex_target = Pathname(File.expand_path(claude_codex_path.readlink.to_s, claude_codex_path.dirname))
-      claude_codex_target.mkpath unless claude_codex_target.exist?
+      odie "Expected ~/.claude_codex symlink target to exist" unless claude_codex_target.exist?
       odie "Expected ~/.claude_codex symlink target to be a directory" unless claude_codex_target.directory?
     elsif claude_codex_path.exist?
       odie "Expected ~/.claude_codex to be a directory or symlink" unless claude_codex_path.directory?
