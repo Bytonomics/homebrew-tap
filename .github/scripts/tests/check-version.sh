@@ -72,7 +72,7 @@ setup_bootstrap_formula() {
 main() {
   run_case "missing formula" setup_missing_formula "0.1.0" "true" ""
   run_case "bootstrap formula without version" setup_bootstrap_formula "0.1.0" "true" ""
-  run_case "same version" setup_version_010 "0.1.0" "false" "0.1.0"
+  run_case "same version" setup_version_010 "0.1.0" "true" "0.1.0"
   run_case "newer version" setup_version_010 "0.2.0" "true" "0.1.0"
   run_case "older version" setup_version_020 "0.1.0" "false" "0.2.0"
 

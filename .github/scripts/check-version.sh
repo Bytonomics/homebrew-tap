@@ -95,7 +95,7 @@ if [[ -f "$formula_path" ]]; then
       should_update="true"
       ;;
     incoming-same)
-      should_update="false"
+      should_update="true"
       ;;
     incoming-older)
       should_update="false"
