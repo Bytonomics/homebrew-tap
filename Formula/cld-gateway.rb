@@ -1,6 +1,8 @@
 # typed: false
 # frozen_string_literal: true
 
+require "etc"
+
 class CldGateway < Formula
   desc "Anthropic-compatible HTTP proxy that routes to OpenAI"
   homepage "https://github.com/Bytonomics/cld-gateway"
@@ -49,9 +51,10 @@ class CldGateway < Formula
   end
 
   def post_install
-    gateway_home = Pathname(Dir.home)/".gateway"
-    claude_home = Pathname(Dir.home)/".claude"
-    claude_codex_home = Pathname(Dir.home)/".claude_codex"
+    user_home = Pathname(Etc.getpwuid(Process.uid).dir)
+    gateway_home = user_home/".gateway"
+    claude_home = user_home/".claude"
+    claude_codex_home = user_home/".claude_codex"
     gateway_config = gateway_home/"config.yml"
     claude_settings = claude_codex_home/"settings.json"
     shared_claude_entries = %w[
@@ -98,17 +101,19 @@ class CldGateway < Formula
   end
 
   service do
+    user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     run [opt_bin/"cld-gateway", "serve"]
-    environment_variables GATEWAY_CONFIG_PATH: (Pathname(Dir.home)/".gateway/config.yml").to_s
+    environment_variables GATEWAY_CONFIG_PATH: (user_home/".gateway/config.yml").to_s
   end
 
   def caveats
+    user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     <<~EOS
       Runtime config was installed to:
-        #{Pathname(Dir.home)/".gateway/config.yml"}
+        #{user_home/".gateway/config.yml"}
 
       Claude settings for the wrapper were installed to:
-        #{Pathname(Dir.home)/".claude_codex/settings.json"}
+        #{user_home/".claude_codex/settings.json"}
 
       Existing shared Claude Code entries from ~/.claude are symlinked into ~/.claude_codex when missing.
 
