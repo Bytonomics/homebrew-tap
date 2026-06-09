@@ -27,31 +27,6 @@ ASSETS = {
 SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 FETCH_TIMEOUT_SECONDS = 30
 FETCH_RETRY_DELAYS_SECONDS = (1, 2, 4)
-CLAUDE_CODEX_SHARED_ENTRIES = (
-    '.claude.json',
-    'CLAUDE.md',
-    'agents',
-    'commands',
-    'debug',
-    'docs',
-    'downloads',
-    'history.jsonl',
-    'hookify.block-direct-go-commands.local.md',
-    'hookify.block-git-add-all.local.md',
-    'hookify.block-no-verify-commit.local.md',
-    'hooks',
-    'ide',
-    'output-styles',
-    'plans',
-    'plugins',
-    'projects',
-    'session-env',
-    'shell-snapshots',
-    'skills',
-    'statusline-command.sh',
-    'todos',
-    'universal_instructions.md',
-)
 
 
 def parse_args() -> argparse.Namespace:
@@ -141,7 +116,6 @@ def build_template_context(version: str, digests: dict[str, str]) -> dict[str, o
         'linux_intel_sha256': require_digest(digests, linux_intel_asset),
         'linux_arm_url': f'{base_url}/{linux_arm_asset}',
         'linux_arm_sha256': require_digest(digests, linux_arm_asset),
-        'shared_claude_entries': list(CLAUDE_CODEX_SHARED_ENTRIES),
     }
 
 

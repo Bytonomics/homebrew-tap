@@ -34,58 +34,18 @@ class CldGateway < Formula
 
   def install
     bin.install "bin/cld-gateway"
+    bin.install "bin/cldg"
+    bin.install "bin/clddg"
     pkgshare.install "config.yml", "settings.json"
-
-    (bin/"cldg").write <<~SH
-      #!/bin/sh
-      exec claude --settings "$HOME/.claude_codex/settings.json" "$@"
-    SH
-
-    (bin/"clddg").write <<~SH
-      #!/bin/sh
-      exec "#{opt_bin}/cldg" --dangerously-skip-permissions "$@"
-    SH
-
-    chmod 0555, bin/"cldg"
-    chmod 0555, bin/"clddg"
+    libexec.install "homebrew/post_install.py"
   end
 
   def post_install
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
-    gateway_home = user_home/".gateway"
-    claude_home = user_home/".claude"
-    claude_codex_path = user_home/".claude_codex"
-    gateway_config = gateway_home/"config.yml"
-    shared_claude_entries = %w[
-<% shared_claude_entries.each do |entry_name| -%>
-      <%= entry_name %>
-<% end -%>
-    ]
+    gateway_config_src = pkgshare/"config.yml"
+    settings_json_src = pkgshare/"settings.json"
 
-    gateway_home.mkpath
-    if claude_codex_path.symlink?
-      claude_codex_target = Pathname(File.expand_path(claude_codex_path.readlink.to_s, claude_codex_path.dirname))
-      odie "Expected ~/.claude_codex symlink target to exist" unless claude_codex_target.exist?
-      odie "Expected ~/.claude_codex symlink target to be a directory" unless claude_codex_target.directory?
-    elsif claude_codex_path.exist?
-      odie "Expected ~/.claude_codex to be a directory or symlink" unless claude_codex_path.directory?
-    else
-      claude_codex_path.mkpath
-    end
-
-    gateway_config.write((pkgshare/"config.yml").read)
-    (claude_codex_path/"settings.json").write((pkgshare/"settings.json").read)
-    odie "Expected ~/.claude to exist as a directory" unless claude_home.directory?
-
-    shared_claude_entries.each do |entry_name|
-      source = claude_home/entry_name
-      target = claude_codex_path/entry_name
-      source_present = source.exist? || source.symlink?
-      next unless source_present
-      next if target.exist? || target.symlink?
-
-      File.symlink(source.to_s, target.to_s)
-    end
+    system(opt_libexec/"post_install.py", user_home.to_s, gateway_config_src.to_s, settings_json_src.to_s)
   end
 
   service do
