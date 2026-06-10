@@ -34,18 +34,11 @@ class CldGateway < Formula
 
   def install
     bin.install "bin/cld-gateway"
+    bin.install "bin/cld-gateway-sh"
     bin.install "bin/cldg"
     bin.install "bin/clddg"
     pkgshare.install "config.yml", "settings.json"
     libexec.install "homebrew/post_install.py"
-  end
-
-  def post_install
-    user_home = Pathname(Etc.getpwuid(Process.uid).dir)
-    gateway_config_src = pkgshare/"config.yml"
-    settings_json_src = pkgshare/"settings.json"
-
-    system(opt_libexec/"post_install.py", user_home.to_s, gateway_config_src.to_s, settings_json_src.to_s)
   end
 
   service do
@@ -57,13 +50,15 @@ class CldGateway < Formula
   def caveats
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     <<~EOS
-      Runtime config was installed to:
+      After running `cld-gateway-sh setup`, runtime config will be installed to:
         #{user_home/".gateway/config.yml"}
 
-      Claude settings for the wrapper were installed to:
-        #{user_home/".claude_codex/settings.json"}
+      After running `cld-gateway-sh setup`, Claude settings for the wrapper will be installed to:
+        #{user_home/".claude_gateway/settings.json"}
 
-      Existing shared Claude Code entries from ~/.claude are symlinked into ~/.claude_codex when missing.
+      Existing shared Claude Code entries from ~/.claude will be symlinked into ~/.claude_gateway when missing.
+
+      After installation, run `cld-gateway-sh setup` to complete user-home configuration.
 
       The cldg and clddg wrappers shell out to `claude`.
       Make sure the `claude` executable is already available on your PATH.
