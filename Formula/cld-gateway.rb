@@ -11,24 +11,24 @@ class CldGateway < Formula
   on_macos do
     if Hardware::CPU.intel?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "0000000000000000000000000000000000000000000000000000000000000001"
+      sha256 "b0e5ddfea09aba8a19c3a0c4d9ae8c94a4d76f0ebbb522756598604538ed7714"
     end
 
     if Hardware::CPU.arm?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+      sha256 "03a436addea73fd2cb07778bfe78485a233dc774fcf7003a358fb79fafaaac70"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "0000000000000000000000000000000000000000000000000000000000000003"
+      sha256 "e9ef3459ea25a82ed1155894b81a3a53ab265f88ff7239a90a9bc4f2390f1c0d"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "0000000000000000000000000000000000000000000000000000000000000002"
+      sha256 "cbe489cf9125b4d9a2bf6eb848c9eb2a1a0cba23a016fd885b8681be39203f74"
     end
   end
 
@@ -38,6 +38,7 @@ class CldGateway < Formula
     bin.install "bin/cldg"
     bin.install "bin/clddg"
     pkgshare.install "config.yml", "settings.json"
+    (pkgshare/"commands"/"codex").install "commands/codex/status.md"
     libexec.install "homebrew/post_install.py"
   end
 
