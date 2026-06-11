@@ -38,8 +38,8 @@ class CldGateway < Formula
     bin.install "bin/cldg"
     bin.install "bin/clddg"
     pkgshare.install "config.yml", "settings.json"
-    (pkgshare/"commands"/"codex").install "commands/codex/status.md"
     libexec.install "homebrew/post_install.py"
+    libexec.install "commands"
   end
 
   service do
