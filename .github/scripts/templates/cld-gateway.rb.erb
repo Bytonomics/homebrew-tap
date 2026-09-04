@@ -51,15 +51,20 @@ class CldGateway < Formula
   def caveats
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     <<~EOS
-      After running `cld-gateway-sh setup`, runtime config will be installed to:
+
+      ⚠️  ==================================================== ⚠️
+      ⚠️   REQUIRED NEXT STEP - run this now:                  ⚠️
+      ⚠️                                                       ⚠️
+      ⚠️     cld-gateway-sh setup                               ⚠️
+      ⚠️  ==================================================== ⚠️
+
+      Setup installs runtime config to:
         #{user_home/".gateway/config.yml"}
 
-      After running `cld-gateway-sh setup`, Claude settings for the wrapper will be installed to:
+      Setup installs Claude settings for the wrapper to:
         #{user_home/".claude_gateway/settings.json"}
 
       Existing shared Claude Code entries from ~/.claude will be symlinked into ~/.claude_gateway when missing.
-
-      After installation, run `cld-gateway-sh setup` to complete user-home configuration.
 
       The cldg and clddg wrappers shell out to `claude`.
       Make sure the `claude` executable is already available on your PATH.

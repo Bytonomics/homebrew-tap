@@ -10,25 +10,25 @@ class CldGateway < Formula
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "b0e5ddfea09aba8a19c3a0c4d9ae8c94a4d76f0ebbb522756598604538ed7714"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-x86_64-apple-darwin.tar.gz"
+      sha256 "1b959f358b9c242a081fc82716d1c9c28cefb7a107cdf012c221fe624086f6ae"
     end
 
     if Hardware::CPU.arm?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "03a436addea73fd2cb07778bfe78485a233dc774fcf7003a358fb79fafaaac70"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-aarch64-apple-darwin.tar.gz"
+      sha256 "5d134c0e03d58a7cf81991ce4c6daaf264c6c938a668dda25412ad0b0753f492"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "e9ef3459ea25a82ed1155894b81a3a53ab265f88ff7239a90a9bc4f2390f1c0d"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
+      sha256 "781964e2ba3cc782463f49b4e783fab5f97a528c071c99a77c4a71b93fe3937a"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v0.1.3/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "cbe489cf9125b4d9a2bf6eb848c9eb2a1a0cba23a016fd885b8681be39203f74"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
+      sha256 "3b03493f4d5e10a1cb2b064d12cd35205a36e274ab5ce67e1992f52f48e8138f"
     end
   end
 
@@ -51,15 +51,20 @@ class CldGateway < Formula
   def caveats
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     <<~EOS
-      After running `cld-gateway-sh setup`, runtime config will be installed to:
+
+      ⚠️  ==================================================== ⚠️
+      ⚠️   REQUIRED NEXT STEP - run this now:                  ⚠️
+      ⚠️                                                       ⚠️
+      ⚠️     cld-gateway-sh setup                               ⚠️
+      ⚠️  ==================================================== ⚠️
+
+      Setup installs runtime config to:
         #{user_home/".gateway/config.yml"}
 
-      After running `cld-gateway-sh setup`, Claude settings for the wrapper will be installed to:
+      Setup installs Claude settings for the wrapper to:
         #{user_home/".claude_gateway/settings.json"}
 
       Existing shared Claude Code entries from ~/.claude will be symlinked into ~/.claude_gateway when missing.
-
-      After installation, run `cld-gateway-sh setup` to complete user-home configuration.
 
       The cldg and clddg wrappers shell out to `claude`.
       Make sure the `claude` executable is already available on your PATH.
