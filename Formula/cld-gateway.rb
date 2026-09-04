@@ -10,25 +10,25 @@ class CldGateway < Formula
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "1b959f358b9c242a081fc82716d1c9c28cefb7a107cdf012c221fe624086f6ae"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-x86_64-apple-darwin.tar.gz"
+      sha256 "c8483362d78f7e9a085fd96f11c93c6d00296b10bf3fbc1eff2054c63143fd62"
     end
 
     if Hardware::CPU.arm?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "5d134c0e03d58a7cf81991ce4c6daaf264c6c938a668dda25412ad0b0753f492"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-aarch64-apple-darwin.tar.gz"
+      sha256 "8c525a1012920145ef1830bcc80c4bb69c58f023a8cb73de66b0a0c19f877e79"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "781964e2ba3cc782463f49b4e783fab5f97a528c071c99a77c4a71b93fe3937a"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
+      sha256 "8d4dcbf061893a7bc2de67a554753d7ee1513e100500600cacc2042edc8d8544"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.1/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "3b03493f4d5e10a1cb2b064d12cd35205a36e274ab5ce67e1992f52f48e8138f"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
+      sha256 "14046a4ede6ad2372b43748f26af6b98199a1353b4044e1d0bac1b9d0b60b6fd"
     end
   end
 
