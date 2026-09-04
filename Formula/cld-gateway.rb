@@ -10,25 +10,25 @@ class CldGateway < Formula
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "c8483362d78f7e9a085fd96f11c93c6d00296b10bf3fbc1eff2054c63143fd62"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-x86_64-apple-darwin.tar.gz"
+      sha256 "8da46beb01a12b6c9abb28d7718453641ce5510896d8921f7219a576b5f2926b"
     end
 
     if Hardware::CPU.arm?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "8c525a1012920145ef1830bcc80c4bb69c58f023a8cb73de66b0a0c19f877e79"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-aarch64-apple-darwin.tar.gz"
+      sha256 "438911ba997bdce55ca5cc4f6581345cdaba7ae4424f3faa6245961ee4a9369f"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "8d4dcbf061893a7bc2de67a554753d7ee1513e100500600cacc2042edc8d8544"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
+      sha256 "2ba0a699d4155ce1c11cb14ca645f5219de0e641909183b44353769b23f34cc1"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.2/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "14046a4ede6ad2372b43748f26af6b98199a1353b4044e1d0bac1b9d0b60b6fd"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
+      sha256 "904dfe621671ce26445d88ad4bf08ad60ee183e1e40669fa439a61baf51a2180"
     end
   end
 
