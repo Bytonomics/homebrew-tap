@@ -51,12 +51,9 @@ class CldGateway < Formula
   def caveats
     user_home = Pathname(Etc.getpwuid(Process.uid).dir)
     <<~EOS
+      ⚠️  REQUIRED — run this now:
 
-      ⚠️  ==================================================== ⚠️
-      ⚠️   REQUIRED NEXT STEP - run this now:                  ⚠️
-      ⚠️                                                       ⚠️
-      ⚠️     cld-gateway-sh setup                               ⚠️
-      ⚠️  ==================================================== ⚠️
+          cld-gateway-sh setup
 
       Setup installs runtime config to:
         #{user_home/".gateway/config.yml"}

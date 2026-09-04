@@ -10,6 +10,12 @@ repos:
 
   - repo: local
     hooks:
+      - id: render-formula
+        name: regenerate formula from template
+        entry: make render
+        language: system
+        pass_filenames: false
+        always_run: true
       - id: check-formula-freshness
         name: check formula matches template
         entry: .github/scripts/check-formula-freshness.sh
