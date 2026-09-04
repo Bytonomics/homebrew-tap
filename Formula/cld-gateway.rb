@@ -10,25 +10,25 @@ class CldGateway < Formula
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "8da46beb01a12b6c9abb28d7718453641ce5510896d8921f7219a576b5f2926b"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-x86_64-apple-darwin.tar.gz"
+      sha256 "bbe9ae9a5b3e5cbe9aac985e7069f8ba13f4c40de2b50c668b0866ddb3b31ec4"
     end
 
     if Hardware::CPU.arm?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "438911ba997bdce55ca5cc4f6581345cdaba7ae4424f3faa6245961ee4a9369f"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-aarch64-apple-darwin.tar.gz"
+      sha256 "117867fbe1f7a6a1a9eb6037f61d0596d0e91a7192db6abaabf1a1a5399e7b9c"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "2ba0a699d4155ce1c11cb14ca645f5219de0e641909183b44353769b23f34cc1"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
+      sha256 "910c668968ee3db33b5972dac01c20a0707daef6c67423da4d6116e61864d826"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.3/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "904dfe621671ce26445d88ad4bf08ad60ee183e1e40669fa439a61baf51a2180"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
+      sha256 "680c5dd90efff54550508f56517d9052c457f449312c4ef796bebc26a46110a3"
     end
   end
 
