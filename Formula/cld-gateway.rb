@@ -10,25 +10,25 @@ class CldGateway < Formula
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-x86_64-apple-darwin.tar.gz"
-      sha256 "bbe9ae9a5b3e5cbe9aac985e7069f8ba13f4c40de2b50c668b0866ddb3b31ec4"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.5/cld-gateway-package-x86_64-apple-darwin.tar.gz"
+      sha256 "251368f5581c4291e76dc54ed4a60f85a6906f621f629d2efdcb7b002e150e8d"
     end
 
     if Hardware::CPU.arm?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-aarch64-apple-darwin.tar.gz"
-      sha256 "117867fbe1f7a6a1a9eb6037f61d0596d0e91a7192db6abaabf1a1a5399e7b9c"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.5/cld-gateway-package-aarch64-apple-darwin.tar.gz"
+      sha256 "bbb78cca657e048373c9e7b7708dd09f953665245ad04afe546a8574ff03bee8"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
-      sha256 "910c668968ee3db33b5972dac01c20a0707daef6c67423da4d6116e61864d826"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.5/cld-gateway-package-x86_64-unknown-linux-musl.tar.gz"
+      sha256 "fb131b980306ad9975e224aa9c28aa36c92dfb027ee95e30162b632b5a31d1c6"
     end
 
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.4/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
-      sha256 "680c5dd90efff54550508f56517d9052c457f449312c4ef796bebc26a46110a3"
+      url "https://github.com/Bytonomics/cld-gateway/releases/download/cld-gateway-v1.1.5/cld-gateway-package-aarch64-unknown-linux-musl.tar.gz"
+      sha256 "06891463c27277654f7b835e4dd6b7ef050477df1de5ed0079448d580c624caf"
     end
   end
 
